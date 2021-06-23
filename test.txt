@@ -1,6 +1,1 @@
-<<<<<<< HEAD
-hello
-hello - raden
-=======
-hello - raden
->>>>>>> main
+tcs_group 6
