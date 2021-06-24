@@ -65,9 +65,78 @@ public class UserDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
 	
 		
 		return selectedGroup;
+	}
+	
+	
+public ArrayList<User> fetchCustomer(int userID) {
+		
+		ArrayList<User> list	= new ArrayList<User>();
+		con	= DatabaseUtil.getConnection();
+		
+		try {
+			ps	= con.prepareStatement("SELECT u.NAME, u.ADDRESS, u.EMAIL, u.CONTACT_NO, p.PLAN_NAME from DispurUser u LEFT JOIN Plan p ON p.planID = u.planID WHERE u.userID = ?");
+			ps.setInt(1, userID);
+			rs	= ps.executeQuery();
+			
+			while(rs.next()) {
+				
+				String name		= rs.getString(1);
+				String add		= rs.getString(2);
+				String email	= rs.getString(3);
+				int cont_no		= rs.getInt(4);
+				String plan		= rs.getString(5);
+				
+				User e 		= new User(name, add, email, cont_no, plan);
+				list.add(e);
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+		
+		return list;
+		
+	}
+	
+	public String fetchCustPlan (int userID) {
+		
+		con	= DatabaseUtil.getConnection();
+		String plan_name = null;
+		
+		try {
+			ps	= con.prepareStatement("SELECT p.PLAN_NAME FROM Plan p LEFT JOIN DispurUser u ON u.planID = p.planID where u.userID = ?");
+			ps.setInt(1, userID);
+			rs	= ps.executeQuery();
+			
+			while(rs.next()) {
+				plan_name = rs.getString(1);
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+	
+		
+		return plan_name;
 	}
 	
 }

@@ -25,6 +25,7 @@ VALUES
 (1, 'NONE', 'NONE', '0/0', 0, 0.0);
 
 select * from Plan left join DispurUser ON DispurUser.planID = Plan.planID;
+SELECT u.NAME, u.ADDRESS, u.EMAIL, u.CONTACT_NO, p.PLAN_NAME from DispurUser u LEFT JOIN Plan p ON p.planID = u.planID
 
 select * from Plan;
 select * from DispurUser;

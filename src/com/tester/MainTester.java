@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainTester {
@@ -39,14 +40,14 @@ public class MainTester {
 					int id = loginPage(s);
 					UserDAO dao_usergroup = new UserDAO();
 					String userGroup = dao_usergroup.getUserGroup(id);
-					System.out.println("usergroup: "+userGroup);
+					//System.out.println("usergroup: "+userGroup);
 					
 					
 					if(userGroup.equalsIgnoreCase("Relationship Manager")) {
 						System.out.println("Relationship Manager !");
 						break;
 					} else {
-						System.out.println("Customer");
+						custDashboard(id);
 						break;
 					}
 				
@@ -118,6 +119,28 @@ public class MainTester {
 		System.out.println("\n");
 		
 		return id;
+		
+	}
+	
+	public static void custDashboard(int id) {
+		
+		
+		UserDAO custDAO 		= new UserDAO();
+		ArrayList<User> list 	= new ArrayList<User>();
+		list	= custDAO.fetchCustomer(id);
+		
+		for(User u : list) {
+			System.out.println("Hi "+u.getName()+" Welcome to Dispur Customer Dashboard");
+			System.out.println("----------------------------------");
+			System.out.println("ID : "+id);
+			System.out.println("Name : "+u.getName());
+			System.out.println("Email : "+u.getEmail());
+			System.out.println("Contact number : "+u.getContact_No());
+			System.out.println("Plan : "+u.getPlanName());
+			System.out.println("----------------------------------");
+		}
+		
+		
 		
 	}
 }

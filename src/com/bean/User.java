@@ -10,6 +10,7 @@ public class User {
 	private String address;
 	private int contact_no;
 	private int planID;
+	private String planName;
 	
 	public User (int userID, String userPWD, String userGROUP, String name, String email, String address, int contact_no, int planID) {
 		
@@ -21,6 +22,16 @@ public class User {
 		this.address	= address;
 		this.contact_no	= contact_no;
 		this.planID	= planID;
+		
+	}
+	
+	public User (String name, String email, String address, int contact_no, String planName) {
+		
+		this.name		= name;
+		this.email		= email;
+		this.address	= address;
+		this.contact_no	= contact_no;
+		this.planName	= planName;
 		
 	}
 	
@@ -90,6 +101,14 @@ public class User {
 	
 	public void setPlanID(int planID) {
 		this.planID	= planID;
+	}
+	
+	public String getPlanName() {
+		return planName;
+	}
+	
+	public void setPlanName(String planName) {
+		this.planName = planName;
 	}
 	
 }
