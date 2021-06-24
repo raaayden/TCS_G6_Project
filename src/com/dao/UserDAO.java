@@ -169,7 +169,95 @@ public class UserDAO {
 		
 	}
 	
-	public int updateCustomer(int id, String name) {
+	public int updateCustomerName(int id, String name) {
+		
+		int res	= 0;
+		con		= DatabaseUtil.getConnection();
+		
+		try {
+			ps		= con.prepareStatement("UPDATE DispurUser SET name = ? WHERE userid = ?");
+			ps.setString(1, name);
+			ps.setInt(2, id);
+			res		= ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+		
+		return res;
+		
+	}
+	
+	public int updateCustomerAdd(int id, String add) {
+		
+		int res	= 0;
+		con		= DatabaseUtil.getConnection();
+		
+		try {
+			ps		= con.prepareStatement("UPDATE DispurUser SET ADDRESS = ? WHERE userid = ?");
+			ps.setString(1, add);
+			ps.setInt(2, id);
+			res		= ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+		
+		return res;
+		
+	}
+	
+	public int updateCustomerEmail(int id, String email) {
+		
+		int res	= 0;
+		con		= DatabaseUtil.getConnection();
+		
+		try {
+			ps		= con.prepareStatement("UPDATE DispurUser SET EMAIL = ? WHERE userid = ?");
+			ps.setString(1, email);
+			ps.setInt(2, id);
+			res		= ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+		
+		return res;
+		
+	}
+	
+	public int updateCustomerContact(int id, int contact) {
+		
+		int res	= 0;
+		con		= DatabaseUtil.getConnection();
+		
+		try {
+			ps		= con.prepareStatement("UPDATE DispurUser SET contact_no = ? WHERE userid = ?");
+			ps.setInt(1, contact);
+			ps.setInt(2, id);
+			res		= ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+		
+		return res;
 		
 	}
 	
