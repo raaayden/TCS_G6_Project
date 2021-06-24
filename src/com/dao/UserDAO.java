@@ -75,7 +75,7 @@ public class UserDAO {
 	}
 	
 	
-public ArrayList<User> fetchCustomer(int userID) {
+	public ArrayList<User> fetchUser(int userID) {
 		
 		ArrayList<User> list	= new ArrayList<User>();
 		con	= DatabaseUtil.getConnection();
@@ -111,20 +111,26 @@ public ArrayList<User> fetchCustomer(int userID) {
 		
 	}
 	
-	public String fetchCustPlan (int userID) {
+	public ArrayList<User> getAllCustomers() {
 		
+		ArrayList<User> list	= new ArrayList<User>();
 		con	= DatabaseUtil.getConnection();
-		String plan_name = null;
 		
 		try {
-			ps	= con.prepareStatement("SELECT p.PLAN_NAME FROM Plan p LEFT JOIN DispurUser u ON u.planID = p.planID where u.userID = ?");
-			ps.setInt(1, userID);
+			ps	= con.prepareStatement("SELECT u.userID, u.NAME, u.EMAIL, u.CONTACT_NO, p.PLAN_NAME from DispurUser u LEFT JOIN Plan p ON p.planID = u.planID where USERGROUP = 'Customer'");
 			rs	= ps.executeQuery();
-			
 			while(rs.next()) {
-				plan_name = rs.getString(1);
+				
+				int userID		= rs.getInt(1);
+				String name		= rs.getString(2);
+				String email	= rs.getString(3);
+				int cont_no		= rs.getInt(4);
+				String plan		= rs.getString(5);
+				
+				User e 		= new User(userID, name, email, cont_no, plan);
+				list.add(e);
+				
 			}
-			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -134,9 +140,40 @@ public ArrayList<User> fetchCustomer(int userID) {
 		finally {
 			DatabaseUtil.closeConnection(con);
 		}
-	
 		
-		return plan_name;
+		return list;
+		
 	}
+	
+	public int deleteCustomer(int id) {
+		
+		int rows	= 0;
+		con 		= DatabaseUtil.getConnection();
+		
+		
+		try {
+			ps	= con.prepareStatement("DELETE from DispurUser WHERE userid = ?");
+			ps.setInt(1, id);
+			rows= ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+		
+		return rows;
+		
+		
+	}
+	
+	public int updateCustomer(int id, String name) {
+		
+	}
+	
+	
+	
 	
 }

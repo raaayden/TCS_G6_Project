@@ -26,6 +26,7 @@ VALUES
 
 select * from Plan left join DispurUser ON DispurUser.planID = Plan.planID;
 SELECT u.NAME, u.ADDRESS, u.EMAIL, u.CONTACT_NO, p.PLAN_NAME from DispurUser u LEFT JOIN Plan p ON p.planID = u.planID
+SELECT u.userID, u.NAME, u.EMAIL, u.CONTACT_NO, p.PLAN_NAME from DispurUser u LEFT JOIN Plan p ON p.planID = u.planID where USERGROUP = 'Customer'
 
 select * from Plan;
 select * from DispurUser;
