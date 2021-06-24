@@ -35,6 +35,17 @@ public class User {
 		
 	}
 	
+	public User (int userID, String name, String email, int contact_no, String planName) {
+		
+		this.userID = userID;
+		this.name	= name;
+		this.email	= email;
+		this.address	= address;
+		this.contact_no	= contact_no;
+		this.planName	= planName;
+		
+	}
+	
 	public User() {
 		
 	}
