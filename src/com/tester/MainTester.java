@@ -1,6 +1,7 @@
 package com.tester;
 
 import com.bean.User;
+import com.bean.Plan;
 import com.dao.UserDAO;
 import com.util.DatabaseUtil;
 
@@ -73,11 +74,10 @@ public class MainTester {
 					int newCust = RegPage(s1);
 					int userInput	= custDashboard(newCust);
 					
-					break;
 				
 			}
 			
-			System.out.println("Exit switch case");
+			//System.out.println("Exit switch case");
 			
 		} while (ProgramStop != true);
 		
@@ -173,41 +173,86 @@ public class MainTester {
 		System.out.println("\n");
 		
 		Scanner num	= new Scanner(System.in);
-		System.out.println("Please enter a number (1 or 2): ");
+		System.out.println("Please enter a number (1 or 2) or 0 to exit: ");
 		int input	= num.nextInt();
 		
-		while(input < 1 || input > 2) {
-			System.out.println("Please enter a valid number (1 or 2)");
+		while(input < 0 || input > 2) {
+			System.out.println("Please enter a valid number (1 or 2) or 0 to exit");
 			input	= num.nextInt();
 		}
 		
 		if(input == 1) {
 			
-			//updateCust(id);
+			updateCust(id);
 			
-		} 
+		} else if (input == 2) {
+			
+			
+			
+		} else {
+			
+			System.out.println("\n\n\n");
+			
+		}
 		
 		return input;
 		
 	}
 	
-//	public static int updateCust(int id) {
-//		
-//		UserDAO custDAO 		= new UserDAO();
-//		ArrayList<User> list 	= new ArrayList<User>();
-//		list	= custDAO.fetchUser(id);
-//		
-//		for(User u : list) {
-//			System.out.println("Hi "+u.getName()+" Welcome to Dispur Customer Dashboard");
-//			System.out.println("----------------------------------");
-//			System.out.println("Name\t\t: "+u.getName());
-//			System.out.println("Email\t\t: "+u.getEmail());
-//			System.out.println("Address\t\t: "+u.getAddress());
-//			System.out.println("Contact number\t: "+u.getContact_No());
-//			System.out.println("----------------------------------");
-//		}
-//		
-//	}
+	public static void updateCust(int id) {
+		
+		UserDAO custDAO 		= new UserDAO();
+		ArrayList<User> list 	= new ArrayList<User>();
+		list	= custDAO.fetchUser(id);
+		
+		for(User u : list) {
+			System.out.println("Hi "+u.getName()+", Update Detail Page");
+			System.out.println("----------------------------------");
+			System.out.println("1.Name\t\t\t: "+u.getName());
+			System.out.println("2.Email\t\t\t: "+u.getEmail());
+			System.out.println("3.Address\t\t: "+u.getAddress());
+			System.out.println("4.Contact number\t: "+u.getContact_No());
+			System.out.println("----------------------------------");
+		}
+		Scanner num	= new Scanner(System.in);
+		System.out.println("Please select which to update (1 to 4) or 5 to back: ");
+		int input	= num.nextInt();
+		
+		while(input < 1 || input > 5) {
+			System.out.println("Please enter a valid number (1 to 4) or 5 to back");
+			input	= num.nextInt();
+		}
+		
+		if(input == 1) {//update name
+			System.out.println("Please enter new name: ");
+			String userInput	= num.next();
+			custDAO.updateCustomerName(id, userInput);
+			System.out.println("Name sucessfully changed!");
+			custDashboard(id);
+		} else if (input == 3) {//update email
+			System.out.println("Please enter new address: ");
+			String userInput	= num.next();
+			custDAO.updateCustomerEmail(id, userInput);
+			System.out.println("Email sucessfully changed!");
+			custDashboard(id);
+		} else if (input == 2) {
+			System.out.println("Please enter new email: ");
+			String userInput	= num.next();
+			custDAO.updateCustomerAdd(id, userInput);
+			System.out.println("Address sucessfully changed!");
+			custDashboard(id);
+		} else if (input == 4) {
+			System.out.println("Please enter new contact no: ");
+			int userInput	= num.nextInt();
+			custDAO.updateCustomerContact(id, userInput);
+			System.out.println("ContactNo sucessfully changed!");
+			custDashboard(id);
+		} else {
+			custDashboard(id);
+		}
+		
+	}
+	
 	
 	public static void relManDashboard(int id) {
 		
@@ -248,6 +293,7 @@ public class MainTester {
 			System.out.println("ID\t\t: "+input);
 			System.out.println("Name\t\t: "+u.getName());
 			System.out.println("Email\t\t: "+u.getEmail());
+			System.out.println("Address\t\t: "+u.getAddress());
 			System.out.println("Contact number\t: "+u.getContact_No());
 			System.out.println("Plan\t\t: "+u.getPlanName());
 			System.out.println("----------------------------------");
@@ -289,6 +335,10 @@ public class MainTester {
 		
 		opDAO.deleteCustomer(input);
 		System.out.println("Cust ID: "+input+" has sucessfully removed!");
+		
+	}
+	
+	public static void PlanPage(int id) {
 		
 	}
 	
