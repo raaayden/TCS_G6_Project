@@ -187,6 +187,61 @@ public class PlanDAO {
 		
 	}
 	
+	public int updateTariff(int planID, String tariff) {
+		
+		int result 	= 0;
+		con 		= DatabaseUtil.getConnection();
+		
+		try {
+			
+			ps		= con.prepareStatement("UPDATE Plan SET TARIFF = ? WHERE planID = ?");
+			ps.setInt(2, planID);
+			ps.setString(1, tariff);
+			result	= ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			
+			DatabaseUtil.closeConnection(con);
+			
+		}
+		
+		return result;
+		
+		
+	}
+	
+	public int deletePlan(int planID) {
+		
+		int result 	= 0;
+		con 		= DatabaseUtil.getConnection();
+		
+		try {
+			
+			ps		= con.prepareStatement("DELETE Plan WHERE planID = ?");
+			ps.setInt(1, planID);
+			result	= ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			
+			DatabaseUtil.closeConnection(con);
+			
+		}
+		
+		return result;
+		
+		
+	}
+	
 	
 	
 }
