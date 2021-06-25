@@ -53,7 +53,7 @@ public class PlanDAO {
 		con						= DatabaseUtil.getConnection();
 		
 		try {
-			ps	= con.prepareStatement("SELECT * from Plan");
+			ps	= con.prepareStatement("SELECT * from Plan WHERE planID != 1");
 			rs	= ps.executeQuery();
 			while(rs.next()) {
 				
@@ -83,6 +83,109 @@ public class PlanDAO {
 		
 	}
 	
+	public ArrayList<Plan> custPlan(int userID) {
+		
+		ArrayList<Plan> list	= new ArrayList<Plan>();
+		con						= DatabaseUtil.getConnection();
+		
+		try {
+			
+			ps	= con.prepareStatement("SELECT p.planID, p.plan_name, p.type_of_plan, p.tariff, p.validity, p.rental from Plan p LEFT JOIN DispurUser u ON u.planID = p.planID WHERE u.userID = ? AND p.planID != 1");
+			ps.setInt(1, userID);
+			rs	= ps.executeQuery();
+			
+			while(rs.next()) {
+				
+				int planID		= rs.getInt(1);
+				String name		= rs.getString(2);
+				String type		= rs.getString(3);
+				String tariff	= rs.getString(4);
+				int validity	= rs.getInt(5);
+				double rental	= rs.getDouble(6);
+				
+				Plan p 			= new Plan(planID, name, type, tariff, validity, rental);
+				list.add(p);
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+		
+		return list;
+		
+	}
+	
+	public ArrayList<Plan> availablePlan(int userID) {
+		
+		ArrayList<Plan> list	= new ArrayList<Plan>();
+		con						= DatabaseUtil.getConnection();
+		
+		try {
+			
+			ps	= con.prepareStatement("SELECT p.planID, p.plan_name, p.type_of_plan, p.tariff, p.validity, p.rental from Plan p LEFT JOIN DispurUser u ON u.planID = p.planID WHERE p.planID != (SELECT planID FROM DispurUser WHERE userID = ?) AND p.planID != 1 ");
+			ps.setInt(1, userID);
+			rs	= ps.executeQuery();
+			
+			while(rs.next()) {
+				
+				int planID		= rs.getInt(1);
+				String name		= rs.getString(2);
+				String type		= rs.getString(3);
+				String tariff	= rs.getString(4);
+				int validity	= rs.getInt(5);
+				double rental	= rs.getDouble(6);
+				
+				Plan p 			= new Plan(planID, name, type, tariff, validity, rental);
+				list.add(p);
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+		
+		return list;
+		
+	}
+	
+	public int subscribePlan(int planID, int userID) {
+		
+		int result 	= 0;
+		con 		= DatabaseUtil.getConnection();
+		
+		try {
+			
+			ps		= con.prepareStatement("UPDATE DispurUser SET planID = ? WHERE userID = ?");
+			ps.setInt(1, planID);
+			ps.setInt(2, userID);
+			result	= ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			
+			DatabaseUtil.closeConnection(con);
+			
+		}
+		
+		return result;
+		
+		
+	}
 	
 	
 	

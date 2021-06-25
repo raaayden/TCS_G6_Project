@@ -144,7 +144,7 @@ public class MainTester {
 		String address= s.nextLine();
 		System.out.println("Enter your email:");
 		String email= s.nextLine();
-		System.out.println("Enter your contact no:");
+		System.out.println("Enter your contact no: ");
 		int contno= s.nextInt();
 		System.out.println("Enter your password:");
 		String pwds = s.next();
@@ -199,11 +199,13 @@ public class MainTester {
 		
 		if(input == 1) {
 			
+			//customer update details
 			updateCust(id);
 			
 		} else if (input == 2) {
 			
-			
+			//customer update network plan
+			PlanPage(id);
 			
 		} else {
 			
@@ -403,7 +405,7 @@ public class MainTester {
 		System.out.println("PlanID\t\t|Plan Name\t\t|Type Of Plan\t\t|Tariff\t\t|Validity\t\t|Rental");
 		for(Plan p : allPlan) {
 			
-			System.out.println(p.getPlanID()+"\t\t "+p.getPlanName()+"\t\t\t "+p.getTypeOfPlan()+"\t\t\t "+p.getTariff()+"\t\t "+p.getValidity()+"\t\t\t "+p.getRental());
+			System.out.println(p.getPlanID()+"\t\t "+p.getPlanName()+"\t\t "+p.getTypeOfPlan()+"\t\t\t "+p.getTariff()+"\t\t "+p.getValidity()+"\t\t\t "+p.getRental());
 			//System.out.println("Cust_ID: "+u.getUserID()+" Cust_Name: "+u.getName()+" \tCust_Plan: "+u.getPlanName());
 			
 		}
@@ -412,25 +414,106 @@ public class MainTester {
 		System.out.println("2. To edit existing network plan");
 		
 		Scanner num	= new Scanner(System.in);
+		System.out.println("Please enter a number (1 or 2) or 0 to exit: ");
 		int input	= num.nextInt();
 		
-//		opDAO.deleteCustomer(input);
-//		System.out.println("Cust ID: "+input+" has sucessfully removed!");
+		while(input < 0 || input > 2) {
+			System.out.println("Please enter a valid number (1 or 2) or 0 to exit");
+			input	= num.nextInt();
+		}
 		
-		System.out.println("\n\n");
-		System.out.println("Please press any key to continue or x to exit");
-		String cont	= num.next();
-		if(!cont.equalsIgnoreCase("x")) {
+		if(input == 1) {
 			
-			adminDashboard(id);
+			//add plan page
+			
+			
+			
+		} else if (input == 2) {
+			
+			//update plan page
+			
+			
+		} else {
+			
+			System.out.println("\n\n\n");
 			
 		}
+		
+//		System.out.println("\n\n");
+//		System.out.println("Please press any key to continue or x to exit");
+//		String cont	= num.next();
+//		if(!cont.equalsIgnoreCase("x")) {
+//			
+//			adminDashboard(id);
+//			
+//		}
 		
 		
 		
 	}
 	
 	public static void PlanPage(int id) {
+		
+		UserDAO custDAO 		= new UserDAO();
+		ArrayList<User> list2 	= new ArrayList<User>();
+		list2	= custDAO.fetchUser(id);
+		//List user details
+		for(User u : list2) {
+			System.out.println("Hi "+u.getName()+" Welcom to Dispur Wireless Plan Page!");
+			System.out.println("----------------------------------");
+			System.out.println("ID\t\t: "+id);
+			System.out.println("Name\t\t: "+u.getName());
+			System.out.println("----------------------------------");
+			System.out.println(u.getName()+"'s current Plan");
+		}
+		
+		
+		//Plan for the specific user
+		PlanDAO allPlanDAO		= new PlanDAO();
+		ArrayList<Plan> allPlan	= new ArrayList<Plan>();
+		allPlan					= allPlanDAO.custPlan(id);
+		System.out.println("PlanID\t\t|Plan Name\t\t|Type Of Plan\t\t|Tariff\t\t|Validity\t\t|Rental");
+		for(Plan p : allPlan) {
+			
+			System.out.println(p.getPlanID()+"\t\t "+p.getPlanName()+"\t\t "+p.getTypeOfPlan()+"\t\t\t "+p.getTariff()+"\t\t "+p.getValidity()+"\t\t\t "+p.getRental());
+			//System.out.println("Cust_ID: "+u.getUserID()+" Cust_Name: "+u.getName()+" \tCust_Plan: "+u.getPlanName());
+			
+		}
+		System.out.println("----------------------------------");
+		
+		
+		//Plan that available to be subscribed
+		System.out.println("Available Plan for you!");
+		ArrayList<Plan> custPlan= new ArrayList<Plan>();
+		custPlan				= allPlanDAO.availablePlan(id);
+		System.out.println("PlanID\t\t|Plan Name\t\t|Type Of Plan\t\t|Tariff\t\t|Validity\t\t|Rental");
+		for(Plan p : custPlan) {
+			
+			System.out.println(p.getPlanID()+"\t\t "+p.getPlanName()+"\t\t "+p.getTypeOfPlan()+"\t\t\t "+p.getTariff()+"\t\t "+p.getValidity()+"\t\t\t "+p.getRental());
+			//System.out.println("Cust_ID: "+u.getUserID()+" Cust_Name: "+u.getName()+" \tCust_Plan: "+u.getPlanName());
+			
+		}
+		System.out.println("----------------------------------");
+		
+		System.out.println("To subscribe a new network plan please enter the plan id");
+		System.out.println("Press 0 to back");
+		
+		Scanner num	= new Scanner(System.in);
+		int planID	= num.nextInt();
+		
+		if(planID != 0) {
+			
+			//subscribe plan 
+			System.out.println("Succesfully subscribe to new plan! ");
+			allPlanDAO.subscribePlan(planID, id);
+			custDashboard(id);
+			
+			
+		} else {
+			
+			custDashboard(id);
+			
+		}
 		
 	}
 	
