@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 public class UserDAO {
 
-	Connection con	= null;
+	Connection con			= null;
 	PreparedStatement ps	= null;
-	ResultSet rs	= null;
+	ResultSet rs			= null;
 	
 	public int addUser(User usr) {
 		int result	= 0;

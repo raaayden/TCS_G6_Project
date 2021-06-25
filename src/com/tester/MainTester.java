@@ -2,6 +2,7 @@ package com.tester;
 
 import com.bean.User;
 import com.bean.Plan;
+import com.dao.PlanDAO;
 import com.dao.UserDAO;
 import com.util.DatabaseUtil;
 
@@ -50,19 +51,26 @@ public class MainTester {
 					
 					if(userGroup.equalsIgnoreCase("Relationship Manager")) {
 						
+						//Relationship manager dashboard
 						relManDashboard(id);
 						break;
 						
 					} else if (userGroup.equalsIgnoreCase("Operator")) {
 						
+						//Operator dashboard
 						operatorDashboard(id);
 						break;
 						
 					} else if (userGroup.equalsIgnoreCase("Admin")) {
 						
+						//Admin dashboard
+						adminDashboard(id);
+						break;
+						
 					} else {
 						
-						int userInput	= custDashboard(id);
+						//Customer Dashboard
+						custDashboard(id);
 						break;
 						
 					}
@@ -70,9 +78,10 @@ public class MainTester {
 				//If user click register(2) --------------------------------
 				case 2:
 					
+					//Customer Registration
 					Scanner s1	= new Scanner(System.in);
 					int newCust = RegPage(s1);
-					int userInput	= custDashboard(newCust);
+					custDashboard(newCust);
 					
 				
 			}
@@ -84,6 +93,8 @@ public class MainTester {
 
 	}
 
+	
+	//Home Page method ---------------------------------------------
 	public static void homePage() {
 		
 		System.out.println("Hi Welcome to Dispur Wireless Portal!");
@@ -95,6 +106,7 @@ public class MainTester {
 	
 	}
 	
+	//Login Page method --------------------------------------------
 	public static int loginPage(Scanner s) {
 		
 		System.out.println("\n");
@@ -112,6 +124,8 @@ public class MainTester {
 		
 	}
 	
+	
+	//Registration Page method ---------------------------------------
 	public static int RegPage(Scanner s) {
 		
 		//Insert Customer with random no
@@ -150,7 +164,9 @@ public class MainTester {
 		
 	}
 	
-	public static int custDashboard(int id) {
+	
+	//Customer Dashboard method ----------------------------------------
+	public static void custDashboard(int id) {
 		
 		
 		UserDAO custDAO 		= new UserDAO();
@@ -195,10 +211,11 @@ public class MainTester {
 			
 		}
 		
-		return input;
 		
 	}
 	
+	
+	//Update Customer method ----------------------------------------
 	public static void updateCust(int id) {
 		
 		UserDAO custDAO 		= new UserDAO();
@@ -254,6 +271,7 @@ public class MainTester {
 	}
 	
 	
+	//Relationship Manager Dashboard method -------------------------------------
 	public static void relManDashboard(int id) {
 		
 		UserDAO RMDAO 			= new UserDAO();
@@ -289,6 +307,7 @@ public class MainTester {
 		ArrayList<User> list2 	= new ArrayList<User>();
 		list2	= custDAO.fetchUser(input);
 		for(User u : list2) {
+			System.out.println("Details for Customer "+u.getName()+" !");
 			System.out.println("----------------------------------");
 			System.out.println("ID\t\t: "+input);
 			System.out.println("Name\t\t: "+u.getName());
@@ -299,8 +318,19 @@ public class MainTester {
 			System.out.println("----------------------------------");
 		}
 		
+		System.out.println("\n\n");
+		System.out.println("Please press any key to continue or x to exit");
+		String cont	= num.next();
+		if(!cont.equalsIgnoreCase("x")) {
+			
+			relManDashboard(id);
+			
+		}
+		
 	}
 	
+	
+	//Operator Dashboard method ----------------------------------------
 	public static void operatorDashboard(int id) {
 		
 		UserDAO opDAO 			= new UserDAO();
@@ -335,6 +365,68 @@ public class MainTester {
 		
 		opDAO.deleteCustomer(input);
 		System.out.println("Cust ID: "+input+" has sucessfully removed!");
+		
+		System.out.println("\n\n");
+		System.out.println("Please press any key to continue or x to exit");
+		String cont	= num.next();
+		if(!cont.equalsIgnoreCase("x")) {
+			
+			operatorDashboard(id);
+			
+		}
+		
+	}
+	
+	
+	//Admin Dashboard method ----------------------------------------
+	public static void adminDashboard(int id) {
+		
+		UserDAO opDAO 			= new UserDAO();
+		ArrayList<User> list 	= new ArrayList<User>();
+		list	= opDAO.fetchUser(id);
+		
+		for(User u : list) {
+			System.out.println("Hi "+u.getName()+" Welcome to Admin Dashboard!");
+			System.out.println("----------------------------------");
+			System.out.println("ID\t\t: "+id);
+			System.out.println("Name\t\t: "+u.getName());
+			System.out.println("Email\t\t: "+u.getEmail());
+			System.out.println("Contact number\t: "+u.getContact_No());
+			System.out.println("----------------------------------");
+		}
+		
+		
+		PlanDAO allPlanDAO		= new PlanDAO();
+		ArrayList<Plan> allPlan	= new ArrayList<Plan>();
+		allPlan					= allPlanDAO.getAllPlans();
+		System.out.println("Available Plan");
+		System.out.println("PlanID\t\t|Plan Name\t\t|Type Of Plan\t\t|Tariff\t\t|Validity\t\t|Rental");
+		for(Plan p : allPlan) {
+			
+			System.out.println(p.getPlanID()+"\t\t "+p.getPlanName()+"\t\t\t "+p.getTypeOfPlan()+"\t\t\t "+p.getTariff()+"\t\t "+p.getValidity()+"\t\t\t "+p.getRental());
+			//System.out.println("Cust_ID: "+u.getUserID()+" Cust_Name: "+u.getName()+" \tCust_Plan: "+u.getPlanName());
+			
+		}
+		System.out.println("----------------------------------");
+		System.out.println("1. To add new network plan");
+		System.out.println("2. To edit existing network plan");
+		
+		Scanner num	= new Scanner(System.in);
+		int input	= num.nextInt();
+		
+//		opDAO.deleteCustomer(input);
+//		System.out.println("Cust ID: "+input+" has sucessfully removed!");
+		
+		System.out.println("\n\n");
+		System.out.println("Please press any key to continue or x to exit");
+		String cont	= num.next();
+		if(!cont.equalsIgnoreCase("x")) {
+			
+			adminDashboard(id);
+			
+		}
+		
+		
 		
 	}
 	
