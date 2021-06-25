@@ -360,22 +360,28 @@ public class MainTester {
 			
 		}
 		System.out.println("----------------------------------");
-		System.out.println("Please enter Cust ID to delete details: ");
+		System.out.println("Please enter Cust ID to delete details or 0 to exit: ");
 		
 		Scanner num	= new Scanner(System.in);
 		int input	= num.nextInt();
 		
-		opDAO.deleteCustomer(input);
-		System.out.println("Cust ID: "+input+" has sucessfully removed!");
+		if(input != 0) {
 		
-		System.out.println("\n\n");
-		System.out.println("Please press any key to continue or x to exit");
-		String cont	= num.next();
-		if(!cont.equalsIgnoreCase("x")) {
-			
+			opDAO.deleteCustomer(input);
+			System.out.println("Cust ID: "+input+" has sucessfully removed!");
+//			System.out.println("Please enter any key to continue or x to exit");
+//			String cont	= num.next();
+//			if(!cont.equalsIgnoreCase("x")) {
+//				operatorDashboard(id);
+//			} else {
+//				homePage();
+//			}
 			operatorDashboard(id);
 			
 		}
+		System.out.println("\n\n");
+		
+		
 		
 	}
 	
@@ -425,12 +431,13 @@ public class MainTester {
 		if(input == 1) {
 			
 			//add plan page
-			
+			addNewPlanPage(id);
 			
 			
 		} else if (input == 2) {
 			
 			//update plan page
+			updatePlanPage(id);
 			
 			
 		} else {
@@ -512,6 +519,116 @@ public class MainTester {
 		} else {
 			
 			custDashboard(id);
+			
+		}
+		
+	}
+	
+	public static void addNewPlanPage(int id) {
+		
+		
+		UserDAO opDAO 			= new UserDAO();
+		ArrayList<User> list 	= new ArrayList<User>();
+		list	= opDAO.fetchUser(id);
+		
+		for(User u : list) {
+			System.out.println("Hi "+u.getName()+" Welcome to Admin Dashboard!");
+			System.out.println("----------------------------------");
+			System.out.println("ID\t\t: "+id);
+			System.out.println("Name\t\t: "+u.getName());
+			System.out.println("----------------------------------");
+		}
+		
+		System.out.println("Please enter the following: ");
+		
+		//Insert Customer with random no
+		int min	= 9000;
+		int max = 9999;
+		int planID = ThreadLocalRandom.current().nextInt(min, max + 1);
+		//System.out.println("Random Number: "+customerID);
+		String userGroup2 = "Customer";
+		
+		Scanner s = new Scanner(System.in);
+		
+		System.out.println("\n");
+		System.out.println("----------------------------------------------------");
+		System.out.println("Enter plan name:");
+		String name		= s.nextLine();
+		System.out.println("Enter type of plan (Data/Voice):");
+		String type		= s.nextLine();
+		System.out.println("Enter Tariff (Rate/Min):");
+		String tariff	= s.nextLine();
+		System.out.println("Enter Validity: ");
+		int validity	= s.nextInt();
+		System.out.println("Enter Rental (RM):");
+		double rental 	= s.nextDouble();
+		System.out.println("----------------------------------------------------");
+		System.out.println("Added new plan Complete !");
+		System.out.println("\n");
+		System.out.println("New Plan ID: "+planID+" for Plan Name: "+name);
+		
+		Plan plan		= new Plan(planID, name, type, tariff, validity, rental);
+		
+		PlanDAO	daoPlan	= new PlanDAO();
+		daoPlan.addPlan(plan);
+		
+		adminDashboard(id);
+		
+		
+	}
+	
+	public static void updatePlanPage(int id) {
+		
+		System.out.println("----------------------------------");
+		PlanDAO allPlanDAO		= new PlanDAO();
+		ArrayList<Plan> allPlan	= new ArrayList<Plan>();
+		allPlan					= allPlanDAO.getAllPlans();
+		System.out.println("Available Plan");
+		System.out.println("PlanID\t\t|Plan Name\t\t|Type Of Plan\t\t|Tariff\t\t|Validity\t\t|Rental");
+		for(Plan p : allPlan) {
+			
+			System.out.println(p.getPlanID()+"\t\t "+p.getPlanName()+"\t\t "+p.getTypeOfPlan()+"\t\t\t "+p.getTariff()+"\t\t "+p.getValidity()+"\t\t\t "+p.getRental());
+			//System.out.println("Cust_ID: "+u.getUserID()+" Cust_Name: "+u.getName()+" \tCust_Plan: "+u.getPlanName());
+			
+		}
+		System.out.println("----------------------------------");
+		System.out.println("1. Edit tariff of existing plan");
+		System.out.println("2. Delete existing plan");
+		System.out.println("Please enter a number (1 or 2) or 0 to exit: ");
+		
+		Scanner s = new Scanner(System.in);
+		int input = s.nextInt();
+		
+		while(input < 0 || input > 2) {
+			System.out.println("Please enter a valid number (1 or 2) or 0 to exit");
+			input	= s.nextInt();
+		}
+		
+		if(input == 1) {
+			
+			//edit tariff
+			System.out.println("Please enter the plan ID to edit: ");
+			int planID	= s.nextInt();
+			System.out.println("Please enter the new tariff for planID: "+planID);
+			String tariff	= s.next();
+			allPlanDAO.updateTariff(planID, tariff);
+			
+			System.out.println("New tariff for plan "+planID+" is "+tariff);
+			adminDashboard(id);
+			
+		} else if (input == 2) {
+			
+			//delete plan 
+			System.out.println("Please enter the plan ID to edit: ");
+			int planID	= s.nextInt();
+			allPlanDAO.deletePlan(planID);
+			
+			System.out.println("Plan "+planID+" has sucessfully deleted!");
+			adminDashboard(id);
+			
+		} else {
+			
+			System.out.println("\n\n\n");
 			
 		}
 		
