@@ -1,15 +1,3 @@
--- Create table for User
-create table DispurUser (
-userID number(10) primary key,
-userPWD varchar(255),
-userGroup varchar(255),
-Name varchar(255),
-Address varchar(255),
-Email varchar(255),
-Contact_No number(12),
-planID number(10) references Plan(planID)
-);
-
 -- Create table for Plan
 create table Plan (
 planID number(10) primary key,
@@ -20,22 +8,36 @@ Validity number(3),
 Rental number(6,2)
 );
 
+-- Create table for User
+create table DispurUser (
+userID number(10) primary key,
+userPWD varchar(255),
+userGroup varchar(255),
+Name varchar(255),
+Address varchar(255),
+Email varchar(255),
+Contact_No varchar(15),
+planID number(10) references Plan(planID)
+);
+
+
+
 
 -- Insert Relationship Manager, Operator and Admin
 INSERT INTO DispurUser
 (userID, userPWD, userGroup, Name, Address, Email, Contact_No, planID)
 VALUES
-(1001,'123','Relationship Manager','Amir','KL','amir_RM@dispur.com',123,1)
+(1001,'123','Relationship Manager','Amir','KL','amir_RM@dispur.com','0132500123',1)
 
 INSERT INTO DispurUser
 (userID, userPWD, userGroup, Name, Address, Email, Contact_No, planID)
 VALUES
-(2001,'123','Operator','Anis','Singapore','anis_OR@dispur.com',9827332,1)
+(2001,'123','Operator','Anis','Singapore','anis_OR@dispur.com','9827332',1)
 
 INSERT INTO DispurUser
 (userID, userPWD, userGroup, Name, Address, Email, Contact_No, planID)
 VALUES
-(3001,'123','Admin','Kumar','India','ramu_admin@dispur.com',8827123,1)
+(3001,'123','Admin','Kumar','India','ramu_admin@dispur.com','8827123',1)
 
 
 -- Insert Plan none

@@ -116,6 +116,15 @@ public class MainTester {
 		int id= s.nextInt();
 		System.out.println("Please enter your password:");
 		String pwd = s.next();
+		UserDAO dao_userpwd = new UserDAO();
+		String userPwd = dao_userpwd.getUserPwd(id);
+//		System.out.println("Password: "+userPwd);
+		while(!userPwd.equalsIgnoreCase(pwd)) {
+					
+			System.out.println("Please enter your password again:");
+			pwd = s.next();
+					
+		}
 		System.out.println("-------------------------------------");
 		System.out.println("Login Successfully !");
 		System.out.println("\n");
@@ -144,8 +153,14 @@ public class MainTester {
 		String address= s.nextLine();
 		System.out.println("Enter your email:");
 		String email= s.nextLine();
-		System.out.println("Enter your contact no: ");
-		int contno= s.nextInt();
+		System.out.println("Enter your contact no: (Max 12 Numbers)");
+		String contno= s.nextLine();
+		
+		while(contno.length() < 11 || contno.length() > 12) {
+			System.out.println("Enter your contact no again: (Max 12 Numbers)");
+			contno= s.nextLine();
+		}
+		
 		System.out.println("Enter your password:");
 		String pwds = s.next();
 		System.out.println("----------------------------------------------------");

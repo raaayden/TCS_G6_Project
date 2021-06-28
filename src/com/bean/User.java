@@ -8,11 +8,11 @@ public class User {
 	private String name;
 	private String email;
 	private String address;
-	private int contact_no;
+	private String contact_no;
 	private int planID;
 	private String planName;
 	
-	public User (int userID, String userPWD, String userGROUP, String name, String email, String address, int contact_no, int planID) {
+	public User (int userID, String userPWD, String userGROUP, String name, String email, String address, String contact_no, int planID) {
 		
 		this.userID	= userID;
 		this.userPWD	= userPWD;
@@ -25,7 +25,7 @@ public class User {
 		
 	}
 	
-	public User (String name, String email, String address, int contact_no, String planName) {
+	public User (String name, String email, String address, String contact_no, String planName) {
 		
 		this.name		= name;
 		this.email		= email;
@@ -35,12 +35,11 @@ public class User {
 		
 	}
 	
-	public User (int userID, String name, String email, int contact_no, String planName) {
+	public User (int userID, String name, String email, String contact_no, String planName) {
 		
 		this.userID = userID;
 		this.name	= name;
 		this.email	= email;
-		this.address	= address;
 		this.contact_no	= contact_no;
 		this.planName	= planName;
 		
@@ -98,11 +97,11 @@ public class User {
 		this.address	= address;
 	}
 	
-	public int getContact_No() {
+	public String getContact_No() {
 		return contact_no;
 	}
 	
-	public void setContact_No(int contact_no) {
+	public void setContact_No(String contact_no) {
 		this.contact_no	= contact_no;
 	}
 	

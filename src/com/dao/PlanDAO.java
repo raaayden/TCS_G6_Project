@@ -22,6 +22,7 @@ public class PlanDAO {
 		con	= DatabaseUtil.getConnection();
 		
 		try {
+			
 			ps	= con.prepareStatement("INSERT INTO Plan VALUES (?,?,?,?,?,?)");
 			ps.setInt(1, p.getPlanID());
 			ps.setString(2, p.getPlanName());
