@@ -28,7 +28,7 @@ public class UserDAO {
 			ps.setString(4, usr.getName());
 			ps.setString(5, usr.getAddress());
 			ps.setString(6, usr.getEmail());
-			ps.setInt(7, usr.getContact_No());
+			ps.setString(7, usr.getContact_No());
 			ps.setInt(8, usr.getPlanID());
 			
 			result	= ps.executeUpdate();
@@ -74,6 +74,35 @@ public class UserDAO {
 		return selectedGroup;
 	}
 	
+	public String getUserPwd (int userID) {
+		
+		con	= DatabaseUtil.getConnection();
+		String selectedPassword = null;
+		
+		try {
+			ps	= con.prepareStatement("SELECT userPwd from DIspurUser where userID = ?");
+			ps.setInt(1, userID);
+			rs	= ps.executeQuery();
+			
+			while(rs.next()) {
+				selectedPassword = rs.getString(1);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		finally {
+			DatabaseUtil.closeConnection(con);
+		}
+	
+		
+		return selectedPassword;
+		
+		
+	}
+	
 	
 	public ArrayList<User> fetchUser(int userID) {
 		
@@ -90,7 +119,7 @@ public class UserDAO {
 				String name		= rs.getString(1);
 				String add		= rs.getString(2);
 				String email	= rs.getString(3);
-				int cont_no		= rs.getInt(4);
+				String cont_no		= rs.getString(4);
 				String plan		= rs.getString(5);
 				
 				User e 		= new User(name, add, email, cont_no, plan);
@@ -124,7 +153,7 @@ public class UserDAO {
 				int userID		= rs.getInt(1);
 				String name		= rs.getString(2);
 				String email	= rs.getString(3);
-				int cont_no		= rs.getInt(4);
+				String cont_no	= rs.getString(4);
 				String plan		= rs.getString(5);
 				
 				User e 		= new User(userID, name, email, cont_no, plan);
