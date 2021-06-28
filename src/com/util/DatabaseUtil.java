@@ -20,7 +20,7 @@ public class DatabaseUtil {
 			Class.forName(DRIVERNAME);
 			
 			connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			System.out.println("connection establisted");
+			//System.out.println("connection establisted");
 		} catch (ClassNotFoundException ex) {
 
 			System.out.println("connection not establisted" + ex);

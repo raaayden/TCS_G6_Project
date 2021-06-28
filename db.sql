@@ -58,6 +58,8 @@ SELECT u.userID, u.NAME, u.EMAIL, u.CONTACT_NO, p.PLAN_NAME from DispurUser u LE
 select * from Plan;
 select * from DispurUser;
 
+SELECT * from DISPURUSER WHERE userid = '1001';
+
 SELECT p.planID, p.plan_name, p.type_of_plan, p.tariff, p.validity, p.rental from Plan p LEFT JOIN DispurUser u ON u.planID = p.planID WHERE p.planID != (SELECT planID FROM DispurUser WHERE userID = 5405)
 
 DROP TABLE DispurUser;
