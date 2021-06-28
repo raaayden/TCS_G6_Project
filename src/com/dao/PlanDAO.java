@@ -243,6 +243,29 @@ public class PlanDAO {
 		
 	}
 	
+	public String getPlanID (int planID) {
+		
+		con	= DatabaseUtil.getConnection();
+		String selectedID	= null;
+		
+		try {
+			ps	= con.prepareStatement("SELECT planID FROM Plan where planID = ?");
+			ps.setInt(1, planID);
+			rs	= ps.executeQuery();
+			
+			while(rs.next()) {
+				selectedID = rs.getString(1);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return selectedID;
+		
+	}
+	
 	
 	
 }

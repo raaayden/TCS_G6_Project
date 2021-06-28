@@ -17,16 +17,6 @@ public class MainTester {
 
 	public static void main(String[] args) {
 		
-		//Insert for Relationship Manager (RM)
-//		User RM	= new User(1001,"123","Relationship Manager","Amir","KL","amir_RM@dispur.com",123,1);
-//		User RM2	= new User(2001,"123","Operator","Anis","Singapore","anis_OR@dispur.com",9827332,1);
-//		User RM3	= new User(3001,"123","Admin","Ramu","India","ramu_admin@dispur.com",8827123,1);
-//		
-//		UserDAO	dao_RM	= new UserDAO();
-//		dao_RM.addUser(RM2);
-//		dao_RM.addUser(RM3);
-//		System.out.println("Insert Relationship Manager Sucessfully: "+dao_RM.addUser(RM));
-		
 		//START SYSTEM
 		
 		boolean ProgramStop = false;
@@ -67,14 +57,13 @@ public class MainTester {
 						adminDashboard(id);
 						break;
 						
-					} else {
+					} else if (userGroup.equalsIgnoreCase("Customer")){
 						
 						//Customer Dashboard
 						custDashboard(id);
 						break;
 						
 					}
-				
 				//If user click register(2) --------------------------------
 				case 2:
 					
@@ -83,13 +72,17 @@ public class MainTester {
 					int newCust = RegPage(s1);
 					custDashboard(newCust);
 					
+					
+				case 0:
+					ProgramStop = true;
+					
 				
 			}
 			
 			//System.out.println("Exit switch case");
 			
 		} while (ProgramStop != true);
-		
+		System.out.println("Program Stop!");
 
 	}
 
@@ -102,25 +95,40 @@ public class MainTester {
 		System.out.println("1. Login");
 		System.out.println("2. Registration");
 		System.out.println("-------------------------------------");
-		System.out.println("Please enter a number:");
+		System.out.println("Please enter (1 or 2) or 0 to exit:");
+	
 	
 	}
 	
 	//Login Page method --------------------------------------------
 	public static int loginPage(Scanner s) {
 		
+		UserDAO dao_user = new UserDAO();
 		System.out.println("\n");
 		System.out.println("Login Page");
 		System.out.println("-------------------------------------");
 		System.out.println("Please enter your ID:");
 		int id= s.nextInt();
+		
+		String userID	= dao_user.getUserID(id);
+		//System.out.println("ID :"+userID);
+		
+		while(userID == null) {
+			
+			System.out.println("user ID not found!, Please re-enter your ID:");
+			id= s.nextInt();
+			userID	= dao_user.getUserID(id);
+			
+		}
+		
 		System.out.println("Please enter your password:");
 		String pwd = s.next();
-		UserDAO dao_userpwd = new UserDAO();
-		String userPwd = dao_userpwd.getUserPwd(id);
+		
+		String userPwd = dao_user.getUserPwd(id);
 //		System.out.println("Password: "+userPwd);
 		while(!userPwd.equalsIgnoreCase(pwd)) {
 					
+			System.out.println("Wrong password!");
 			System.out.println("Please enter your password again:");
 			pwd = s.next();
 					
@@ -153,11 +161,12 @@ public class MainTester {
 		String address= s.nextLine();
 		System.out.println("Enter your email:");
 		String email= s.nextLine();
-		System.out.println("Enter your contact no: (Max 12 Numbers)");
+		System.out.println("Enter your contact no: (eg: 0123456789012)");
 		String contno= s.nextLine();
 		
+		//check if number is valid usually number between 11 - 12 digits
 		while(contno.length() < 11 || contno.length() > 12) {
-			System.out.println("Enter your contact no again: (Max 12 Numbers)");
+			System.out.println("Enter your contact no again: (eg: 0123456789012)");
 			contno= s.nextLine();
 		}
 		
@@ -222,11 +231,7 @@ public class MainTester {
 			//customer update network plan
 			PlanPage(id);
 			
-		} else {
-			
-			System.out.println("\n\n\n");
-			
-		}
+		} 
 		
 		
 	}
@@ -276,8 +281,12 @@ public class MainTester {
 			System.out.println("Address sucessfully changed!");
 			custDashboard(id);
 		} else if (input == 4) {
-			System.out.println("Please enter new contact no: ");
-			int userInput	= num.nextInt();
+			System.out.println("Please enter new contact no: (eg: 0123456789012)");
+			String userInput	= num.next();
+			while(userInput.length() < 11 || userInput.length() > 12) {
+				System.out.println("Enter your contact no again: (eg: 0123456789012!)");
+				userInput = num.nextLine();
+			}
 			custDAO.updateCustomerContact(id, userInput);
 			System.out.println("ContactNo sucessfully changed!");
 			custDashboard(id);
@@ -319,6 +328,17 @@ public class MainTester {
 		
 		Scanner num	= new Scanner(System.in);
 		int input	= num.nextInt();
+		
+
+		String getUserID = RMDAO.getUserID(input);
+		
+		while(getUserID == null) {
+			
+			System.out.println("User ID: "+input+" is not found please enter again: ");
+			input	= num.nextInt();
+			getUserID = allCustDAO.getUserID(input);
+			
+		}
 		
 		UserDAO custDAO 		= new UserDAO();
 		ArrayList<User> list2 	= new ArrayList<User>();
@@ -381,21 +401,53 @@ public class MainTester {
 		int input	= num.nextInt();
 		
 		if(input != 0) {
-		
-			opDAO.deleteCustomer(input);
-			System.out.println("Cust ID: "+input+" has sucessfully removed!");
-//			System.out.println("Please enter any key to continue or x to exit");
-//			String cont	= num.next();
-//			if(!cont.equalsIgnoreCase("x")) {
-//				operatorDashboard(id);
-//			} else {
-//				homePage();
-//			}
-			operatorDashboard(id);
+			
+			String userID 	= opDAO.getUserID(input);
+			int planID		= opDAO.getUserPlan(input);
+ 			//System.out.println("userID: "+userID);
+ 			//System.out.println("userPlanID: "+planID);
+ 			
+ 			while(userID == null) {
+ 				System.out.println("ID not found please re enter: ");
+ 				input	= num.nextInt();
+ 				userID 	= opDAO.getUserID(input);
+ 				planID	= opDAO.getUserPlan(input);
+ 			}
+ 			
+ 			if(userID != null && planID == 1) {
+ 				int select = 0;
+ 				do {
+ 					
+ 					System.out.println("Are you sure you want to delete? ID: "+userID);
+ 					System.out.println("1 - yes | 2 - no");
+ 					select	= num.nextInt();
+ 					switch(select) {
+ 					
+ 						case 1:
+ 							opDAO.deleteCustomer(input);
+ 							System.out.println("ID: "+input+" has succesfully deleted");
+ 							break;
+ 							
+ 						case 2:
+ 							//System.out.println("Cancel");
+ 							break;
+ 							
+ 						default:
+ 							System.out.println("Wrong input!");
+ 					
+ 					}
+ 					
+ 					
+ 				} while (select != 1 && select != 2);
+ 				
+ 				
+ 				operatorDashboard(id);
+ 			} else if(userID != null && planID != 1) {
+ 				System.out.println("ID: "+input+" is still subscribed");
+ 				operatorDashboard(id);
+ 			}
 			
 		}
-		System.out.println("\n\n");
-		
 		
 		
 	}
@@ -624,6 +676,17 @@ public class MainTester {
 			//edit tariff
 			System.out.println("Please enter the plan ID to edit: ");
 			int planID	= s.nextInt();
+			
+			String getplan	= allPlanDAO.getPlanID(planID);
+						
+			while(getplan == null) {
+				
+				System.out.println("Plan ID: "+planID+" is not found please enter again: ");
+				planID	= s.nextInt();
+				getplan	= allPlanDAO.getPlanID(planID);
+				
+			}
+			
 			System.out.println("Please enter the new tariff for planID: "+planID);
 			String tariff	= s.next();
 			allPlanDAO.updateTariff(planID, tariff);
@@ -634,12 +697,53 @@ public class MainTester {
 		} else if (input == 2) {
 			
 			//delete plan 
-			System.out.println("Please enter the plan ID to edit: ");
+			System.out.println("Please enter the plan ID to delete: ");
 			int planID	= s.nextInt();
-			allPlanDAO.deletePlan(planID);
 			
-			System.out.println("Plan "+planID+" has sucessfully deleted!");
-			adminDashboard(id);
+			String getplan	= allPlanDAO.getPlanID(planID);
+			
+			while(getplan == null) {
+				
+				System.out.println("Plan ID: "+planID+" is not found please enter again: ");
+				planID	= s.nextInt();
+				getplan	= allPlanDAO.getPlanID(planID);
+				
+			}
+			
+			if(getplan != null) {
+ 				int select = 0;
+ 				do {
+ 					
+ 					System.out.println("Are you sure you want to delete? ID: "+planID);
+ 					System.out.println("1 - yes | 2 - no");
+ 					select	= s.nextInt();
+ 					switch(select) {
+ 					
+ 						case 1:
+ 							allPlanDAO.deletePlan(planID);
+ 							System.out.println("ID: "+planID+" has succesfully deleted");
+ 							break;
+ 							
+ 						case 2:
+ 							//System.out.println("Cancel");
+ 							break;
+ 							
+ 						default:
+ 							System.out.println("Wrong input!");
+ 					
+ 					}
+ 					
+ 					
+ 				} while (select != 1 && select != 2);
+ 				
+ 				
+ 				adminDashboard(id);
+ 			} 
+			
+//			allPlanDAO.deletePlan(planID);
+//			
+//			System.out.println("Plan "+planID+" has sucessfully deleted!");
+//			adminDashboard(id);
 			
 		} else {
 			

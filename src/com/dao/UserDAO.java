@@ -74,6 +74,52 @@ public class UserDAO {
 		return selectedGroup;
 	}
 	
+	public String getUserID (int userID) {
+		
+		con	= DatabaseUtil.getConnection();
+		String selectedID	= null;
+		
+		try {
+			ps	= con.prepareStatement("SELECT userID FROM DispurUser where userID = ?");
+			ps.setInt(1, userID);
+			rs	= ps.executeQuery();
+			
+			while(rs.next()) {
+				selectedID = rs.getString(1);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return selectedID;
+		
+	}
+	
+	public int getUserPlan (int userID) {
+		
+		con	= DatabaseUtil.getConnection();
+		int selectedID	= 0;
+		
+		try {
+			ps	= con.prepareStatement("SELECT planID from DispurUser where userID = ?");
+			ps.setInt(1, userID);
+			rs	= ps.executeQuery();
+			
+			while(rs.next()) {
+				selectedID = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return selectedID;
+		
+		
+	}
+	
 	public String getUserPwd (int userID) {
 		
 		con	= DatabaseUtil.getConnection();
@@ -267,14 +313,14 @@ public class UserDAO {
 		
 	}
 	
-	public int updateCustomerContact(int id, int contact) {
+	public int updateCustomerContact(int id, String contact) {
 		
 		int res	= 0;
 		con		= DatabaseUtil.getConnection();
 		
 		try {
 			ps		= con.prepareStatement("UPDATE DispurUser SET contact_no = ? WHERE userid = ?");
-			ps.setInt(1, contact);
+			ps.setString(1, contact);
 			ps.setInt(2, id);
 			res		= ps.executeUpdate();
 		} catch (SQLException e) {
